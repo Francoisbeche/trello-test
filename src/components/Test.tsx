@@ -7,7 +7,7 @@ const Test: React.FC = (props: any) => {
     const { user, dispatchUser, userAction } = useUser();
     return (
         <div>
-            <p>username : {user.userName}</p>
+            <p>username : {user.isConnected}</p>
             <button onClick={() => userAction.setUserName(dispatchUser, 'toto')} >setUsername</button>
 
             Test Component < div > {`The current count is ${store.count}`}</div >

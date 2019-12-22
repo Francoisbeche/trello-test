@@ -3,7 +3,7 @@ import React, { useReducer } from 'react'
 import { State, Dispatch, StoreProviderProps } from './types';
 import Reducer from './reducer';
 
-const initialState: State = { userName: '' }
+const initialState: State = { isConnected: false, userName: "" }
 
 const UserContext = React.createContext<State | undefined>(undefined)
 const UserDispatchContext = React.createContext<Dispatch | undefined>(undefined)
