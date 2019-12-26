@@ -1,5 +1,7 @@
 import React from 'react';
 import './App.css';
+import 'antd/dist/antd.css';
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -11,6 +13,7 @@ import {
 import { StoreProvider } from './context/store/store';
 import Test from './components/Test';
 import { UserProvider, useUser } from './context/user';
+import Layout from './components/Layout';
 
 function Home() {
   return <h2>Home</h2>;
@@ -58,20 +61,22 @@ const App: React.FC = () => {
     <Router>
       <StoreProvider>
         <UserProvider>
-          <Switch>
-            <Route path="/about">
-              <Test />
-            </Route>
-            <Route exact path="/">
-              <Home />
-            </Route>
-            <PrivateRoute path="/admin">
-              <Admin />
-            </PrivateRoute>
-            <Route path="*">
-              <NoMatch />
-            </Route>
-          </Switch>
+          <Layout >
+            <Switch>
+              <Route path="/about">
+                <Test />
+              </Route>
+              <Route exact path="/">
+                <Home />
+              </Route>
+              <PrivateRoute path="/admin">
+                <Admin />
+              </PrivateRoute>
+              <Route path="*">
+                <NoMatch />
+              </Route>
+            </Switch>
+          </Layout>
         </UserProvider>
       </StoreProvider>
     </Router>
