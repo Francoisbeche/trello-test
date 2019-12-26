@@ -1,7 +1,7 @@
 import { Dispatch } from './types';
 import axios from 'axios';
 export function setUserName(dispatch: Dispatch, userName: string) {
-    dispatch({ type: 'create', session: undefined, isConnected: true, error: undefined, user: undefined })
+    dispatch({ type: 'create', payload: {}, error: undefined })
 }
 
 export async function login(dispatch: Dispatch, { email, password }: { email: string, password: string }) {
@@ -14,9 +14,9 @@ export async function login(dispatch: Dispatch, { email, password }: { email: st
                 email, password
             }
         });
-        dispatch({ type: 'create', session: resp.data.data, isConnected: true, error: undefined, user: undefined })
+        dispatch({ type: 'create', error: undefined, payload: { session: resp.data.data, user: undefined } })
     } catch (error) {
-        dispatch({ type: 'error', session: undefined, isConnected: false, error: error.response.data.message, user: undefined })
+        dispatch({ type: 'error', error: error.response.data.message, payload: { session: undefined, user: undefined } })
     }
 }
 
@@ -33,8 +33,41 @@ export async function getUser(dispatch: Dispatch, session: any) {
                 'Authorization': `Bearer ${session && session.token}`
             },
         });
-        dispatch({ type: 'getUser', session: session, isConnected: true, error: undefined, user: resp.data.data })
+        dispatch({ type: 'getUser', error: undefined, payload: { user: resp.data.data } })
     } catch (error) {
-        dispatch({ type: 'error', session: undefined, isConnected: false, error: error.response.data.message, user: undefined })
+        dispatch({ type: 'error', error: error.response.data.message, payload: { session: undefined, user: undefined } })
+    }
+}
+
+export async function loginFlow(dispatch: Dispatch, { email, password }: { email: string, password: string }, history: any) {
+
+    try {
+        const session = await axios({
+            method: 'post',
+            url: 'http://localhost:8080/api/session',
+            data: {
+                email, password
+            }
+        });
+        dispatch({ type: 'create', payload: { session: session.data.data, user: undefined }, error: undefined })
+        try {
+            const resp = await axios({
+                method: 'get',
+                url: 'http://localhost:8080/api/user',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Authorization': `Bearer ${session && session.data.data.token}`
+                },
+            });
+            dispatch({ type: 'getUser', payload: { session: session, user: resp.data.data }, error: undefined })
+            console.log("user=>", resp.data.data)
+            history.push('/')
+        } catch (error) {
+            dispatch({ type: 'error', payload: { session: undefined, user: undefined }, error: error.response.data.message })
+        }
+    } catch (error) {
+        dispatch({ type: 'error', error: error.response.data.message, payload: { session: undefined, user: undefined } })
     }
 }

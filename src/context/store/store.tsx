@@ -3,7 +3,7 @@ import React, { useReducer } from 'react'
 import { State, Dispatch, StoreProviderProps } from './types';
 import Reducer from './reducer';
 
-const initialState: State = { count: 0 }
+const initialState: State = { teams: [], list: [], error: undefined }
 
 const StoreContext = React.createContext<State | undefined>(undefined)
 const StoreDispatchContext = React.createContext<Dispatch | undefined>(undefined)

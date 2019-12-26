@@ -1,5 +1,5 @@
-export type State = { count: number };
-export type Action = { type: string };
+export type State = { error: any, teams: Array<any>, list: Array<{ listName: string, id: string, cards: Array<any> }> };
+export type Action = { type: string, payload: any, error: any };
 export type Dispatch = (action: Action) => void;
 export type StoreProviderProps = { children: React.ReactNode };
 

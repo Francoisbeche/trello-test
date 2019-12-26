@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import 'antd/dist/antd.css';
 
@@ -14,6 +14,9 @@ import { StoreProvider } from './context/store/store';
 import Test from './components/Test';
 import { UserProvider, useUser } from './context/user';
 import Layout from './components/Layout';
+import Login from './pages/LoginPage';
+import TeamPage from './pages/TeamPage';
+import ListPage from './pages/ListPage';
 
 function Home() {
   return <h2>Home</h2>;
@@ -57,21 +60,28 @@ function PrivateRoute({ children, ...rest }: any) {
 }
 
 const App: React.FC = () => {
+
   return (
     <Router>
       <StoreProvider>
         <UserProvider>
           <Layout >
             <Switch>
-              <Route path="/about">
+              <PrivateRoute path="/about">
                 <Test />
-              </Route>
-              <Route exact path="/">
-                <Home />
-              </Route>
+              </PrivateRoute>
+              <PrivateRoute exact path="/">
+                <TeamPage />
+              </PrivateRoute>
+              <PrivateRoute exact path="/team/:idTeam">
+                <ListPage />
+              </PrivateRoute>
               <PrivateRoute path="/admin">
                 <Admin />
               </PrivateRoute>
+              <Route path="/login">
+                <Login />
+              </Route>
               <Route path="*">
                 <NoMatch />
               </Route>

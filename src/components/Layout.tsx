@@ -1,10 +1,10 @@
 import React from 'react';
 import { useUser } from '../context/user';
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Layout, Menu } from 'antd';
 import {
     BrowserRouter as Router,
     Link
-  } from "react-router-dom";
+} from "react-router-dom";
 import styled from 'styled-components';
 const { Header, Content } = Layout;
 const LayoutComponent: React.FC = (props: any) => {
@@ -14,7 +14,7 @@ const LayoutComponent: React.FC = (props: any) => {
         <Layout>
             <Header style={{ height: '30px', position: 'fixed', zIndex: 1, width: '100%' }}>
                 <HelloCmp>
-                {user.user && `${user.user.email}`} 
+                    {user.user && `${user.user.email}`}
                 </HelloCmp>
                 <Menu
                     theme="dark"
@@ -22,8 +22,8 @@ const LayoutComponent: React.FC = (props: any) => {
                     defaultSelectedKeys={['1']}
                     style={{ lineHeight: '30px' }}
                 >
-                     <Menu.Item key="1"><Link to="/about">Mes teams</Link></Menu.Item>
-                     <Menu.Item key="2"><Link to="/">Déconnexion</Link></Menu.Item>
+                    <Menu.Item key="1"><Link to="/about">Mes teams</Link></Menu.Item>
+                    <Menu.Item key="2"><Link to="/">Déconnexion</Link></Menu.Item>
                 </Menu>
             </Header>
             <Content style={{ padding: '0 30px', marginTop: 30 }}>

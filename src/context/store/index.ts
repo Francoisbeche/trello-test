@@ -1,8 +1,17 @@
 import { StoreProvider, useStoreState, useStoreDispatch } from './store';
-import { asyncIncrement } from './actions';
+import { getTeams, getListByTeamId, getCardByListId, updateCard, deleteCard, addCard } from './actions';
 
 function useStore() {
-    return { store: useStoreState(), dispatchStore: useStoreDispatch(), storeAction: {asyncIncrement} }
+    return {
+        store: useStoreState(), dispatchStore: useStoreDispatch(), storeAction: {
+            getTeams,
+            getListByTeamId,
+            getCardByListId,
+            updateCard,
+            deleteCard,
+            addCard
+        }
+    }
 }
 
 export {
