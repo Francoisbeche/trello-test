@@ -1,43 +1,65 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 import { useStore } from '../context/store';
 import { useUser } from '../context/user';
 
 
-import { Skeleton, Switch, Card, Icon, Avatar } from 'antd';
+import { Card, Icon, Popconfirm } from 'antd';
 import { withRouter } from 'react-router-dom';
+import TeamTitle from '../components/TeamTitle';
 
-const { Meta } = Card;
+import bg from '../assets/bg.jpg';
 
 const TeamPage = (props: any) => {
     const { store, dispatchStore, storeAction } = useStore();
     const { user } = useUser();
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        console.log("user.session", user.session)
-        storeAction.getTeams(dispatchStore, user.session);
-    }, []);
+        if (loading === false) {
+            setLoading(true);
+            storeAction.cleanStore(dispatchStore)
+            storeAction.getTeams(dispatchStore, user.session);
+        }
 
+    }, [dispatchStore, user.session, storeAction, loading]);
+
+
+    const updateName = (teamInfo: any) => {
+        storeAction.updateTeam(dispatchStore, user.session, teamInfo);
+    }
+
+    const deleteTeam = (team: any) => {
+        storeAction.deleteTeam(dispatchStore, user.session, team)
+    }
     const teams = store.teams.map(function (team) {
         return (
             <TeamCard key={team.id}
                 style={{ width: 300, marginTop: 16 }}
+                bodyStyle={{
+                    padding: 0,
+                }}
                 actions={[
-                    <Icon type="edit" key="edit" />,
-                    <Icon type="delete" key="delete" />,
+                    <Icon type="eye" onClick={(e: any) => { e.preventDefault(); props.history.push(`/team/${team.id}`) }} />,
+
+                    <Popconfirm
+                        title="Voulez vous vraiment supprimer cette team?"
+                        onConfirm={(e: any) => { deleteTeam(team) }}
+                        onCancel={() => { }}
+                        okText="Oui"
+                        cancelText="Non"
+                    >
+                        <Icon type="delete" key="delete" />
+                    </Popconfirm>,
                 ]}
             >
-                <div onClick={(e: any) => { e.preventDefault(); console.log('go to team', team.id); props.history.push(`/team/${team.id}`) }}>
-                    <Skeleton loading={false} avatar active>
-                        <Meta
-                            avatar={
-                                <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                            }
-                            title={team.teamName}
-                        />
-                    </Skeleton>
-                </div>
+                <Bg onClick={(e: any) => { e.preventDefault(); props.history.push(`/team/${team.id}`) }} >
+
+                    
+                    <Title><TeamTitle team={team} updateName={updateName} /></Title>
+
+                </Bg>
             </TeamCard>);
     })
 
@@ -60,3 +82,17 @@ const TeamCard = styled(Card)`
 margin: 10px;
 cursor: pointer;
 `;
+
+const Title = styled.h3`
+color: white;
+
+`;
+
+const Bg = styled.div`
+background-image: url(${bg});
+height: 200px;
+background-position: center;
+color: white;
+padding-top: 10px;
+padding-left:10px;
+`

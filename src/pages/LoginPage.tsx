@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Icon, Checkbox, Button } from 'antd';
+import { Form, Input, Icon, Button } from 'antd';
 import styled from 'styled-components';
 import { useUser } from '../context/user';
 import { withRouter } from 'react-router-dom';
@@ -11,7 +11,6 @@ const LoginComp = (props: any) => {
         e.preventDefault();
         props.form.validateFields((err: any, values: any) => {
             if (!err) {
-                console.log('Received values of form: ', values);
                 try {
                     userAction.loginFlow(dispatchUser, { email: values.email, password: values.password}, props.history)
                 } catch (err) {
@@ -48,7 +47,7 @@ const LoginComp = (props: any) => {
                 <Button type="primary" htmlType="submit" className="login-form-button">
                     Log in
           </Button>
-                Or <a href="">register now!</a>
+                Or register now!
             </Form.Item>
             {user.error && user.error}
         </MyForm>

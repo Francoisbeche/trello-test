@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
-import { Modal, Input,} from 'antd';
+import { Modal, Input, } from 'antd';
 
 const { TextArea } = Input;
 const AddCardModal = (props: any) => {
 
-    const [value, setValue] = useState();
+    const [formValue, setformValue] = useState({ name: '', content: '' });
     const onOk = (e: any) => {
 
-        props.onOk(e, { listId: props.listId, content: value })
+        props.onOk(e, { listId: props.listId, content: formValue.content, name: formValue.name })
+        setformValue({ name: '', content: '' });
     }
     const onChange = (e: any) => {
-        setValue(e.target.value);
-        console.log(e.target.value)
+        const { name, value } = e.target
+        setformValue({
+            ...formValue,
+            [name]: value
+        });
     }
 
     return (
@@ -22,7 +26,8 @@ const AddCardModal = (props: any) => {
                 onOk={onOk}
                 onCancel={props.onCancel}
             >
-                <TextArea rows={4} name='content' value={value} onChange={onChange} />
+                <Input name='name' value={formValue.name} onChange={onChange} />
+                <TextArea rows={4} name='content' value={formValue.content} onChange={onChange} />
             </Modal>
         </div>
     );

@@ -1,15 +1,12 @@
 import React from 'react';
 import { useUser } from '../context/user';
 import { Layout, Menu } from 'antd';
-import {
-    BrowserRouter as Router,
-    Link
-} from "react-router-dom";
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 const { Header, Content } = Layout;
 const LayoutComponent: React.FC = (props: any) => {
 
-    const { user, dispatchUser, userAction } = useUser();
+    const { user } = useUser();
     return (
         <Layout>
             <Header style={{ height: '30px', position: 'fixed', zIndex: 1, width: '100%' }}>
@@ -22,12 +19,11 @@ const LayoutComponent: React.FC = (props: any) => {
                     defaultSelectedKeys={['1']}
                     style={{ lineHeight: '30px' }}
                 >
-                    <Menu.Item key="1"><Link to="/about">Mes teams</Link></Menu.Item>
-                    <Menu.Item key="2"><Link to="/">Déconnexion</Link></Menu.Item>
+                    <Menu.Item key="1"><Link to="/">Mes teams</Link></Menu.Item>
                 </Menu>
             </Header>
-            <Content style={{ padding: '0 30px', marginTop: 30 }}>
-                <div style={{ background: '#fff', padding: 24, minHeight: '100vh' }}>{props.children}</div>
+            <Content style={{ padding: '0', marginTop: 30, width: "100vw", background: '#fff' }}>
+                <div style={{ background: '#fff' }}>{props.children}</div>
             </Content>
         </Layout>
     );

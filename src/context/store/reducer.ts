@@ -26,10 +26,10 @@ const Reducer = (state: State, action: Action) => {
             })
 
             if (list >= 0 && card >= 0) {
-                tmpList[list].cards[card] = action.payload.card
+                tmpList[list].cards[card] = action.payload.card;
                 return { ...state, list: tmpList }
             }
-
+            return state;
         }
         case 'deleteCard': {
             let list = state.list.findIndex((item) => {
@@ -54,14 +54,95 @@ const Reducer = (state: State, action: Action) => {
                 tmpList[list].cards.push(action.payload.card);
                 return { ...state, list: tmpList }
             }
+            return state;
 
+        }
+        case 'addList': {
+            const tmpList = state.list;
+            tmpList.push(action.payload.list);
+            return { ...state, list: tmpList }
+
+        }
+        case 'updateTeam': {
+            const teamIndex = state.teams.findIndex((team) => {
+                return team.id === action.payload.id;
+            })
+            if (teamIndex >= 0) {
+                const tmpTeam = state.teams;
+                tmpTeam[teamIndex] = action.payload;
+                return { ...state, teams: tmpTeam };
+            }
+
+            return { ...state };
+        }
+        case 'deleteTeam': {
+            let team = state.teams.findIndex((item) => {
+                return item.id === action.payload.team.id;
+            })
+            let tmpTeams = state.teams;
+
+
+            if (team >= 0) {
+                tmpTeams.splice(team, 1)
+            }
+            return { ...state, teams: tmpTeams }
+        }
+        case 'updateList': {
+            let list = state.list.findIndex((item) => {
+                return item.id === action.payload.list.id;
+            })
+            let tmpList = state.list;
+            if (list >= 0) {
+                tmpList[list].listName = action.payload.list.listName
+
+                return { ...state, list: tmpList }
+            }
+            return state;
+        }
+        case 'deleteList': {
+            let list = state.list.findIndex((item) => {
+                return item.id === action.payload.list.id;
+            })
+            let tmpList = state.list;
+
+
+            if (list >= 0) {
+                tmpList.splice(list, 1)
+            }
+            return { ...state, list: tmpList }
         }
         case 'error': {
             return { ...state, error: action.error }
         }
+        case 'moveCardFromlist': {
+            const { oldListId, cardId, destListId } = action.payload;
 
+            const oldListIndex = state.list.findIndex((list) => {
+                return list.id === oldListId;
+            })
+            const destListIndex = state.list.findIndex((list) => {
+                return list.id === destListId;
+            })
+            if (oldListIndex >= 0 && destListIndex >= 0) {
+                const cardIndex = state.list[oldListIndex].cards.findIndex((card) => {
+                    return card.id === cardId;
+                })
+
+                if (cardIndex >= 0) {
+                    const card = state.list[oldListIndex].cards[cardIndex];
+                    state.list[oldListIndex].cards.splice(cardIndex, 1)
+                    state.list[destListIndex].cards.push(card);
+                }
+            }
+
+            return { ...state };
+        }
+        case 'cleanStore': {
+            return { ...state, list: [] }
+        }
         default: {
-            throw new Error(`Unhandled action type: ${action.type}`)
+            //throw new Error(`Unhandled action type: ${action.type}`)
+            return state;
         }
     }
 }

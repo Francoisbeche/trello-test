@@ -1,81 +1,109 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 import { useStore } from '../context/store';
 import { useUser } from '../context/user';
 
-
-import { Skeleton, Switch, Card, Icon, Avatar } from 'antd';
 import { useParams } from 'react-router-dom';
-import ListCard from '../components/listCard';
-import AddCardModal from '../components/addCardModal';
+
+import List from '../components/List';
+import { Card } from 'antd';
+import ListTitle from '../components/ListTitle';
+
+import body from '../assets/body.jpg';
 
 const ListPage = (props: any) => {
     const { store, dispatchStore, storeAction } = useStore();
     const { user } = useUser();
     let { idTeam } = useParams();
-    const [list, setList] = useState();
-    const [modalVisible, setModalVisiblte] = useState(false);
-
+    const [loading, setLoading] = useState(false);
+    const [addList, setAddList] = useState(false)
     useEffect(() => {
-        storeAction.getListByTeamId(dispatchStore, user.session, idTeam as string);
-    }, []);
+        if (loading === false) {
+            setLoading(true);
+            storeAction.getListByTeamId(dispatchStore, user.session, idTeam as string);
+        }
+    }, [store.list, idTeam, storeAction, user.session, dispatchStore, loading]);
 
-    const teams = store.list.map(function (list) {
-        return (
-            <RowList key={list.id}>
-                <Listard key={list.id}
-                    style={{ width: 300, marginTop: 16 }}
-                    actions={[
-                        <Icon type="plus" key="plus" onClick={(e:any) =>{
-                            setList(list)
-                            setModalVisiblte(true)
-                        }} />,
-                    ]}
-                >
-                    {list.listName}
-                    <ListCard list={list} />
-                </Listard>
-            </RowList>
-        );
+    const list = store.list.map(function (list) {
+        return (<List key={list.id} list={list} />);
     })
 
-    const onOk = (e: any, card:any) => {
-        console.log("onOk")
-        storeAction.addCard(dispatchStore, user.session, card)
-        setModalVisiblte(false)
+    const createList = (name: string) => {
+        storeAction.createList(dispatchStore, user.session, {
+            "listName": name,
+            "teamId": idTeam
+        });
+        setAddList(false)
     }
-    const onCancel = (e: any) => {
-        console.log("onCancel")
-        setModalVisiblte(false)
+
+    const displayAddCard = (e: any) => {
+        setAddList(true)
     }
     return (
         <Container>
-           {list && <AddCardModal
-                listId={list.id}
-                onOk={onOk}
-                visible={modalVisible}
-                onCancel={onCancel} /> } 
-            {teams}
+            {list}
+            {addList === false ? <AddListCard style={{ width: 300 }} bodyStyle={{ padding: 0, lineHeight: '30px', height: 30, paddingLeft: '10px' }}
+                onClick={displayAddCard}>
+                <p>Ajouter une liste</p>
+            </AddListCard> :
+
+
+                <ColumnList>
+
+                    <CardList
+                        bodyStyle={{ padding: 5 }}
+                        title={<ListTitle displayInput={true} placeholder={'Nom de votre liste'} list={{ listname: "" }} updateName={createList} />}
+                        style={{ width: 300, marginTop: 16 }}
+                        actions={[]}
+                    >
+                    </CardList>
+                </ColumnList>
+            }
         </Container >
     );
 };
 
 export default ListPage
 
-const Container = styled.div`
-width:100%;
-display: flex;
-flex-wrap: wrap;
-align-item: flex-start
-`;
-
-const RowList = styled.div`
+const ColumnList = styled.div`
 width: 400px;
 display: flex;
 flex-wrap: wrap;
+margin: 10px;
+margin-bottom:150px;
 `;
 
-const Listard = styled(Card)`
-align-self:flex-start
+const Container = styled.div`
+display: flex;
+flex-wrap: no-wrap;
+align-item: flex-start;
+position: absolute;
+bottom:0;
+padding-top:30px;
+height: 100%;
+white-space:nowrap;
+background-image: url(${body});
+background-repeat: repeat;
+overflow:scroll;
+overflow-x: hidden;
+padding-bottom: 100px;
+min-width: 100%;
 `;
+
+const AddListCard = styled(Card)`
+align-self:flex-start;
+margin-top: 26px;
+width: 300px;
+flex: 0 0 auto;
+cursor:pointer;
+background: #F7F3F2;
+`;
+const CardList = styled(Card)`
+align-self:flex-start;
+padding:0;
+background: #F7F3F2;
+margin-bottom: 100px;
+`;
+
+

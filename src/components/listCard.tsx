@@ -1,67 +1,74 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useStore } from '../context/store';
 import { useUser } from '../context/user';
 import UpdateCardModal from './updateCardModal';
 
-const ListCard = ({ list }: { list: any }) => {
-    const { store, dispatchStore, storeAction } = useStore();
-    const { user } = useUser();
-    const [modalVisible, setModalVisiblte] = useState(false);
-    const [card, setCard] = useState();
-    useEffect(() => {
-        storeAction.getCardByListId(dispatchStore, user.session, list.id as string);
-    }, []);
+const ListCard = ({ list, card }: { list: any, card: any }) => {
 
-    const onOk = (e: any, cardUpdated: any) => {
-        console.log("onOk")
-        storeAction.updateCard(dispatchStore, user.session, cardUpdated)
-        setModalVisiblte(false)
+    const { dispatchStore, storeAction } = useStore();
+    const { user } = useUser();
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const onOk = (e: any, card: any) => {
+        storeAction.updateCard(dispatchStore, user.session, card)
+        setModalVisible(false)
+    }
+    const updateName = (card: any) => {
+        storeAction.updateCard(dispatchStore, user.session, card)
     }
     const onCancel = (e: any) => {
-        console.log("onCancel")
-        setModalVisiblte(false)
-    }
-    const cards = () => {
-        let tmpList = store.list.find((item) => {
-            return item.id === list.id;
-        })
-        if (tmpList && tmpList.cards !== undefined) {
-            return tmpList.cards.map((item) => {
-                return <ChildCard onClick={(e: any) => {
-                    setCard(item);
-                    setModalVisiblte(true)
-                }}
-                    key={item.id}>{item.content}</ChildCard>
-            })
-        }
-        return null;
+        setModalVisible(false)
     }
     const onDelete = (card: any) => {
-        console.log("delete")
-        storeAction.deleteCard(dispatchStore, user.session, card);
-        setModalVisiblte(false)
+        storeAction.deleteCard(dispatchStore, user.session, card)
+    }
+    if (card === undefined){
+        console.log("card is null")
+        return null;
+    }
+
+
+    const onDragStart = (e: any, cardId: any, listId: any) => {
+        e.dataTransfer.setData('cardId', cardId)
+        e.dataTransfer.setData('listId', listId)
+        console.log("start card", cardId, "start list", listId)
     }
     return (
         <div>
-            {card && <UpdateCardModal
+            <UpdateCardModal
                 card={card}
+                list={list}
                 onOk={onOk}
                 visible={modalVisible}
                 onCancel={onCancel}
-                onDelete={onDelete} />}
-            {cards()}
+                onDelete={onDelete}
+                onUpdateName={updateName} />
+            <ChildCard
+                draggable
+                onDragStart={(e: any) => { onDragStart(e, card.id, list.id) }}
+                id={card.id}
+                onClick={(e: any) => {
+                    setModalVisible(true)
+                }}>
+                {card.name}
+            </ChildCard>
         </div>
+
     );
 }
 
+
 export default ListCard;
 
-
 const ChildCard = styled.div`
-
+border: 1px solid #F7F3F2;
+bordr-radius: 5px;
 width: 100%;
 margin-bottom: 10px;
-background:grey;
-height: 50px;
+padding-left: 10px;
+min-height: 30px;
+background: white;
+line-height: 30px;
+cursor: pointer;
 `;
