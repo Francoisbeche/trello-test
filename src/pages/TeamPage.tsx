@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { useStore } from '../context/store';
 import { useUser } from '../context/user';
 
-
 import { Card, Icon, Popconfirm } from 'antd';
 import { withRouter } from 'react-router-dom';
 import TeamTitle from '../components/TeamTitle';
@@ -15,7 +14,7 @@ const TeamPage = (props: any) => {
     const { store, dispatchStore, storeAction } = useStore();
     const { user } = useUser();
     const [loading, setLoading] = useState(false);
-
+    const [addTeam, setAddTeam] = useState(false)
     useEffect(() => {
         if (loading === false) {
             setLoading(true);
@@ -33,6 +32,17 @@ const TeamPage = (props: any) => {
     const deleteTeam = (team: any) => {
         storeAction.deleteTeam(dispatchStore, user.session, team)
     }
+
+    const createTeam = (teamInfo:any) => {
+        storeAction.addTeam(dispatchStore, user.session, {
+            "teamName": teamInfo.teamName,
+        });
+        setAddTeam(false)
+    }
+    const displayAddTeam = (e: any) => {
+        setAddTeam(true)
+    }
+
     const teams = store.teams.map(function (team) {
         return (
             <TeamCard key={team.id}
@@ -55,10 +65,7 @@ const TeamPage = (props: any) => {
                 ]}
             >
                 <Bg onClick={(e: any) => { e.preventDefault(); props.history.push(`/team/${team.id}`) }} >
-
-                    
                     <Title><TeamTitle team={team} updateName={updateName} /></Title>
-
                 </Bg>
             </TeamCard>);
     })
@@ -66,11 +73,31 @@ const TeamPage = (props: any) => {
     return (
         <Container>
             {teams}
+            {addTeam === false ? <AddListTeam style={{ width: 300 }} bodyStyle={{ padding: 0, lineHeight: '30px', height: 30, paddingLeft: '10px' }}
+                onClick={displayAddTeam}>
+                <p>Ajouter une liste</p>
+            </AddListTeam> :
+                <CardList
+                    bodyStyle={{ padding: 5 }}
+                    title={<TeamTitle displayInput={true} placeholder={'Nom de votre liste'} team={{ teamName: "" }} updateName={createTeam} />}
+                    style={{ width: 300, marginTop: 16 }}
+                    actions={[]}
+                >
+                </CardList>}
         </Container >
     );
 };
 
 export default withRouter(TeamPage)
+
+const AddListTeam = styled(Card)`
+align-self:flex-start;
+margin-top: 26px;
+width: 300px;
+flex: 0 0 auto;
+cursor:pointer;
+background: #F7F3F2;
+`;
 
 const Container = styled.div`
 width:100%;
@@ -96,3 +123,11 @@ color: white;
 padding-top: 10px;
 padding-left:10px;
 `
+
+
+const CardList = styled(Card)`
+align-self:flex-start;
+padding:0;
+background: #F7F3F2;
+margin-bottom: 100px;
+`;

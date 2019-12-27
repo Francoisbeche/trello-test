@@ -1,5 +1,5 @@
 import { StoreProvider, useStoreState, useStoreDispatch } from './store';
-import { cleanStore, getTeams, getListByTeamId, getCardByListId, updateCard, deleteCard, addCard, updateList, deleteList, createList, moveCardFromlist, updateTeam, deleteTeam } from './actions';
+import { addTeam, cleanStore, getTeams, getListByTeamId, getCardByListId, updateCard, deleteCard, addCard, updateList, deleteList, createList, moveCardFromlist, updateTeam, deleteTeam } from './actions';
 
 function useStore() {
     return {
@@ -16,7 +16,8 @@ function useStore() {
             moveCardFromlist,
             updateTeam,
             deleteTeam,
-            cleanStore
+            cleanStore,
+            addTeam
         }
     }
 }

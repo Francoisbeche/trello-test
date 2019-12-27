@@ -56,6 +56,26 @@ export async function deleteTeam(dispatch: Dispatch, session: any, team: any) {
     }
 }
 
+export async function addTeam(dispatch: Dispatch, session: any, team: any) {
+    try {
+        const resp = await axios({
+            method: 'POST',
+            url: `http://localhost:8080/api/team`,
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'Authorization': `Bearer ${session && session.token}`
+            },
+            data: team
+        });
+
+        dispatch({ type: 'addTeam', payload: { team: resp.data.data }, error: undefined })
+    } catch (error) {
+        dispatch({ type: 'error', error: error.response.data.message, payload: undefined })
+    }
+}
+
 
 
 export async function getListByTeamId(dispatch: Dispatch, session: any, teamId: string) {
@@ -215,5 +235,5 @@ export function moveCardFromlist(dispatch: Dispatch, oldListId: string, cardId: 
 }
 
 export function cleanStore(dispatch: Dispatch) {
-    dispatch({ type: 'cleanStore', payload: { }, error: undefined })
+    dispatch({ type: 'cleanStore', payload: {}, error: undefined })
 }

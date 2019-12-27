@@ -99,6 +99,7 @@ flex: 0 0 auto;
 cursor:pointer;
 background: #F7F3F2;
 `;
+
 const CardList = styled(Card)`
 align-self:flex-start;
 padding:0;

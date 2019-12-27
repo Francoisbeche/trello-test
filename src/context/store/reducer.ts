@@ -140,6 +140,11 @@ const Reducer = (state: State, action: Action) => {
         case 'cleanStore': {
             return { ...state, list: [] }
         }
+        case 'addTeam': {
+            const tmpTeam = state.teams;
+            tmpTeam.push(action.payload.team);
+            return { ...state, team: tmpTeam }
+        }
         default: {
             //throw new Error(`Unhandled action type: ${action.type}`)
             return state;
