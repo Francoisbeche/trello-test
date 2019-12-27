@@ -16,6 +16,7 @@ import Layout from './components/Layout';
 import Login from './pages/LoginPage';
 import TeamPage from './pages/TeamPage';
 import ListPage from './pages/ListPage';
+import Register from './pages/RegisterPage';
 
 
 function NoMatch() {
@@ -67,6 +68,9 @@ const App: React.FC = () => {
               </PrivateRoute>
               <Route path="/login">
                 <Login />
+              </Route>
+              <Route path="/register">
+                <Register />
               </Route>
               <Route path="*">
                 <NoMatch />

@@ -24,7 +24,6 @@ const ListCard = ({ list, card }: { list: any, card: any }) => {
         storeAction.deleteCard(dispatchStore, user.session, card)
     }
     if (card === undefined){
-        console.log("card is null")
         return null;
     }
 
@@ -32,7 +31,6 @@ const ListCard = ({ list, card }: { list: any, card: any }) => {
     const onDragStart = (e: any, cardId: any, listId: any) => {
         e.dataTransfer.setData('cardId', cardId)
         e.dataTransfer.setData('listId', listId)
-        console.log("start card", cardId, "start list", listId)
     }
     return (
         <div>

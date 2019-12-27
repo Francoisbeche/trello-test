@@ -38,7 +38,6 @@ export default class TeamTitle extends Component<{ team: any, updateName: any, p
     }
     handleClickOutside(event: any) {
         if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
-            console.log("clic outside");
             this.setState({
                 ...this.state,
                 displayInput: false
@@ -49,7 +48,6 @@ export default class TeamTitle extends Component<{ team: any, updateName: any, p
     }
 
     handleClicInSide(refName: any, event: any) {
-        console.log('click inside')
         this.wrapperRef = this.refs[refName];
         this.setState({
             displayInput: true

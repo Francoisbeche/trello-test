@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useUser } from '../context/user';
 import { withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-const LoginComp = (props: any) => {
+const RegisterComp = (props: any) => {
     const { getFieldDecorator } = props.form;
     const { user, dispatchUser, userAction } = useUser();
     const handleSubmit = (e: any) => {
@@ -12,7 +12,7 @@ const LoginComp = (props: any) => {
         props.form.validateFields((err: any, values: any) => {
             if (!err) {
                 try {
-                    userAction.loginFlow(dispatchUser, { email: values.email, password: values.password }, props.history)
+                    userAction.register(dispatchUser, { email: values.email, password: values.password }, props.history)
                 } catch (err) {
                     console.log(err)
                 }
@@ -22,7 +22,7 @@ const LoginComp = (props: any) => {
     };
     return (
         <MyForm onSubmit={handleSubmit} className="login-form">
-            <h2>Login</h2>
+             <h2>Register</h2>
             <Form.Item>
                 {getFieldDecorator('email', {
                     rules: [{ required: true, message: 'Please input your email!' }],
@@ -46,18 +46,18 @@ const LoginComp = (props: any) => {
             </Form.Item>
             <Form.Item>
                 <Button type="primary" htmlType="submit" className="login-form-button">
-                    Log in
+                    register
           </Button>
-                <Link to="/register">Or register now!</Link>
+                <Link to={'/login'}>Or Login Now</Link>
             </Form.Item>
             {user.error && user.error}
         </MyForm>
     );
 }
 
-const Login = Form.create({ name: 'normal_login' })(withRouter(LoginComp));
+const Register = Form.create({ name: 'normal_login' })(withRouter(RegisterComp));
 
-export default Login
+export default Register
 
 const MyForm = styled(Form)`
 width: 400px;

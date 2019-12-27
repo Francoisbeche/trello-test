@@ -39,7 +39,6 @@ export default class CardTitle extends Component<{ card: any, updateName: any },
     }
     handleClickOutside(event: any) {
         if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
-            console.log("clic outside");
             this.props.updateName(this.state.value)
             this.setState({
                 displayInput: false
@@ -48,7 +47,6 @@ export default class CardTitle extends Component<{ card: any, updateName: any },
     }
 
     handleClicInSide(refName: any, event: any) {
-        console.log('click inside')
         this.wrapperRef = this.refs[refName];
         this.setState({
             displayInput: true

@@ -20,6 +20,24 @@ export async function login(dispatch: Dispatch, { email, password }: { email: st
     }
 }
 
+export async function register(dispatch: Dispatch, { email, password }: { email: string, password: string }, history: any) {
+
+    try {
+        const resp = await axios({
+            method: 'post',
+            url: 'http://localhost:8080/api/user',
+            data: {
+                email, password
+            }
+        });
+        dispatch({ type: 'create', error: undefined, payload: { session: resp.data.data.sessions[0], user: undefined } })
+        dispatch({ type: 'getUser', payload: { session: resp.data.data.sessions[0], user: resp.data.data }, error: undefined })
+        history.push('/')
+    } catch (error) {
+        dispatch({ type: 'error', error: error.response.data.message, payload: { session: undefined, user: undefined } })
+    }
+}
+
 export async function getUser(dispatch: Dispatch, session: any) {
 
     try {

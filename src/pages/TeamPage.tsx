@@ -33,7 +33,7 @@ const TeamPage = (props: any) => {
         storeAction.deleteTeam(dispatchStore, user.session, team)
     }
 
-    const createTeam = (teamInfo:any) => {
+    const createTeam = (teamInfo: any) => {
         storeAction.addTeam(dispatchStore, user.session, {
             "teamName": teamInfo.teamName,
         });
@@ -75,11 +75,11 @@ const TeamPage = (props: any) => {
             {teams}
             {addTeam === false ? <AddListTeam style={{ width: 300 }} bodyStyle={{ padding: 0, lineHeight: '30px', height: 30, paddingLeft: '10px' }}
                 onClick={displayAddTeam}>
-                <p>Ajouter une liste</p>
+                <p>Ajouter une team</p>
             </AddListTeam> :
                 <CardList
                     bodyStyle={{ padding: 5 }}
-                    title={<TeamTitle displayInput={true} placeholder={'Nom de votre liste'} team={{ teamName: "" }} updateName={createTeam} />}
+                    title={<TeamTitle displayInput={true} placeholder={'Nom de votre Team'} team={{ teamName: "" }} updateName={createTeam} />}
                     style={{ width: 300, marginTop: 16 }}
                     actions={[]}
                 >
