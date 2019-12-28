@@ -1,8 +1,6 @@
 import { Dispatch } from './types';
 import axios from 'axios';
-export function setUserName(dispatch: Dispatch, userName: string) {
-    dispatch({ type: 'create', payload: {}, error: undefined })
-}
+
 
 export async function login(dispatch: Dispatch, { email, password }: { email: string, password: string }) {
 
@@ -80,7 +78,6 @@ export async function loginFlow(dispatch: Dispatch, { email, password }: { email
                 },
             });
             dispatch({ type: 'getUser', payload: { session: session, user: resp.data.data }, error: undefined })
-            console.log("user=>", resp.data.data)
             history.push('/')
         } catch (error) {
             dispatch({ type: 'error', payload: { session: undefined, user: undefined }, error: error.response.data.message })

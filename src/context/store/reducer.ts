@@ -65,11 +65,11 @@ const Reducer = (state: State, action: Action) => {
         }
         case 'updateTeam': {
             const teamIndex = state.teams.findIndex((team) => {
-                return team.id === action.payload.id;
+                return team.id === action.payload.team.id;
             })
             if (teamIndex >= 0) {
                 const tmpTeam = state.teams;
-                tmpTeam[teamIndex] = action.payload;
+                tmpTeam[teamIndex] = action.payload.team;
                 return { ...state, teams: tmpTeam };
             }
 
@@ -142,8 +142,9 @@ const Reducer = (state: State, action: Action) => {
         }
         case 'addTeam': {
             const tmpTeam = state.teams;
+            //console.log(action.payload)
             tmpTeam.push(action.payload.team);
-            return { ...state, team: tmpTeam }
+            return { ...state, teams: tmpTeam }
         }
         default: {
             //throw new Error(`Unhandled action type: ${action.type}`)

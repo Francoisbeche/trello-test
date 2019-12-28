@@ -9,6 +9,7 @@ import { withRouter } from 'react-router-dom';
 import TeamTitle from '../components/TeamTitle';
 
 import bg from '../assets/bg.jpg';
+import Team from '../models/Team';
 
 const TeamPage = (props: any) => {
     const { store, dispatchStore, storeAction } = useStore();
@@ -34,9 +35,9 @@ const TeamPage = (props: any) => {
     }
 
     const createTeam = (teamInfo: any) => {
-        storeAction.addTeam(dispatchStore, user.session, {
+        storeAction.addTeam(dispatchStore, user.session, new Team({
             "teamName": teamInfo.teamName,
-        });
+        }));
         setAddTeam(false)
     }
     const displayAddTeam = (e: any) => {
@@ -64,8 +65,11 @@ const TeamPage = (props: any) => {
                     </Popconfirm>,
                 ]}
             >
-                <Bg onClick={(e: any) => { e.preventDefault(); props.history.push(`/team/${team.id}`) }} >
+                <Bg >
                     <Title><TeamTitle team={team} updateName={updateName} /></Title>
+                    <BodyClic onClick={(e: any) => { e.preventDefault(); props.history.push(`/team/${team.id}`) }} >
+
+                    </BodyClic>
                 </Bg>
             </TeamCard>);
     })
@@ -90,6 +94,16 @@ const TeamPage = (props: any) => {
 
 export default withRouter(TeamPage)
 
+const BodyClic = styled.div`
+width: 100%;
+height:100%;
+background: red;
+background-color: rgba(0, 0, 0, 0.3);
+&:hover {
+    background-color: transparent;
+  }
+`;
+
 const AddListTeam = styled(Card)`
 align-self:flex-start;
 margin-top: 26px;
@@ -112,7 +126,10 @@ cursor: pointer;
 
 const Title = styled.h3`
 color: white;
-
+display: block
+position: relative;
+z-index: 50;
+padding-left: 10px;
 `;
 
 const Bg = styled.div`
@@ -121,7 +138,6 @@ height: 200px;
 background-position: center;
 color: white;
 padding-top: 10px;
-padding-left:10px;
 `
 
 

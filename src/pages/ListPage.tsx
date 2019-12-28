@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom';
 import List from '../components/List';
 import { Card } from 'antd';
 import ListTitle from '../components/ListTitle';
+import ListEntity from '../models/List';
 
 import body from '../assets/body.jpg';
 
@@ -30,10 +31,10 @@ const ListPage = (props: any) => {
     })
 
     const createList = (name: string) => {
-        storeAction.createList(dispatchStore, user.session, {
+        storeAction.createList(dispatchStore, user.session, new ListEntity({
             "listName": name,
             "teamId": idTeam
-        });
+        }));
         setAddList(false)
     }
 

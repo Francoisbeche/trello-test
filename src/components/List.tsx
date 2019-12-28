@@ -6,6 +6,8 @@ import { useStore } from '../context/store';
 import { useUser } from '../context/user';
 import ListCard from './listCard';
 import CreateCard from './CreateCard';
+import CardEntity from '../models/Card';
+import ListEntity from '../models/List';
 
 const List = ({ list }: { list: any }) => {
     const [modalVisible, setModalVisible] = useState(false);
@@ -20,7 +22,7 @@ const List = ({ list }: { list: any }) => {
     }, [storeAction, user.session, list.id, dispatchStore, loading]);
 
     const updateName = (name: string) => {
-        storeAction.updateList(dispatchStore, user.session, { id: list.id, listName: name });
+        storeAction.updateList(dispatchStore, user.session, new ListEntity({ id: list.id, listName: name }));
     }
 
     const confirm = (e: any) => {
@@ -32,10 +34,10 @@ const List = ({ list }: { list: any }) => {
 
 
     const createCard = (cardName: any) => {
-        storeAction.addCard(dispatchStore, user.session, {
+        storeAction.addCard(dispatchStore, user.session, new CardEntity({
             "listId": list.id,
             "name": cardName
-        })
+        }))
         setModalVisible(false)
     }
 
@@ -60,7 +62,7 @@ const List = ({ list }: { list: any }) => {
         if (listIndex >= 0) {
             const cardData = store.list[listIndex].cards.find((card) => {
                 return card.id === cardId;
-            })          
+            })
             if (cardData) {
                 storeAction.updateCard(dispatchStore, user.session, {
                     ...cardData,

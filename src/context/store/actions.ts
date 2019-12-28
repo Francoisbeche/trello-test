@@ -1,5 +1,9 @@
 import { Dispatch } from './types';
 import axios from 'axios';
+import Team from '../../models/Team';
+import List from '../../models/List';
+import Card from '../../models/Card';
+import Payload from '../../models/Payload';
 
 export async function getTeams(dispatch: Dispatch, session: any) {
     try {
@@ -12,14 +16,18 @@ export async function getTeams(dispatch: Dispatch, session: any) {
                 'X-Requested-With': 'XMLHttpRequest',
                 'Authorization': `Bearer ${session && session.token}`
             },
+        }).then((resp: any) => {
+            return resp.data.data.map((item: any) => {
+                return new Team(item);
+            })
         });
-        dispatch({ type: 'setTeam', payload: { teams: resp.data.data }, error: undefined })
+        dispatch({ type: 'setTeam', payload: new Payload({ teams: resp }), error: undefined })
     } catch (error) {
-        dispatch({ type: 'error', error: error.response.data.message, payload: undefined })
+        dispatch({ type: 'error', error: error.response.data.message, payload: new Payload() })
     }
 }
 
-export async function updateTeam(dispatch: Dispatch, session: any, team: any) {
+export async function updateTeam(dispatch: Dispatch, session: any, team: Team) {
     try {
         const resp = await axios({
             method: 'PUT',
@@ -32,13 +40,15 @@ export async function updateTeam(dispatch: Dispatch, session: any, team: any) {
             },
             data: team
         });
-        dispatch({ type: 'updateTeam', payload: { team: resp.data.data }, error: undefined })
+
+        const teamResp = new Team(resp.data.data);
+        dispatch({ type: 'updateTeam', payload: new Payload({ team: teamResp }), error: undefined })
     } catch (error) {
-        dispatch({ type: 'error', error: error.response.data.message, payload: undefined })
+        dispatch({ type: 'error', error: error.response.data.message, payload: new Payload(undefined) })
     }
 }
 
-export async function deleteTeam(dispatch: Dispatch, session: any, team: any) {
+export async function deleteTeam(dispatch: Dispatch, session: any, team: Team) {
     try {
         await axios({
             method: 'DELETE',
@@ -50,13 +60,13 @@ export async function deleteTeam(dispatch: Dispatch, session: any, team: any) {
                 'Authorization': `Bearer ${session && session.token}`
             },
         });
-        dispatch({ type: 'deleteTeam', payload: { team: team }, error: undefined })
+        dispatch({ type: 'deleteTeam', payload: new Payload({ team: team }), error: undefined })
     } catch (error) {
-        dispatch({ type: 'error', error: error.response.data.message, payload: undefined })
+        dispatch({ type: 'error', error: error.response.data.message, payload: new Payload(undefined) })
     }
 }
 
-export async function addTeam(dispatch: Dispatch, session: any, team: any) {
+export async function addTeam(dispatch: Dispatch, session: any, team: Team) {
     try {
         const resp = await axios({
             method: 'POST',
@@ -69,10 +79,10 @@ export async function addTeam(dispatch: Dispatch, session: any, team: any) {
             },
             data: team
         });
-
-        dispatch({ type: 'addTeam', payload: { team: resp.data.data }, error: undefined })
+        const teamResp = new Team(resp.data.data);
+        dispatch({ type: 'addTeam', payload: new Payload({ team: teamResp }), error: undefined })
     } catch (error) {
-        dispatch({ type: 'error', error: error.response.data.message, payload: undefined })
+        dispatch({ type: 'error', error: error.response.data.message, payload: new Payload(undefined) })
     }
 }
 
@@ -89,10 +99,15 @@ export async function getListByTeamId(dispatch: Dispatch, session: any, teamId: 
                 'X-Requested-With': 'XMLHttpRequest',
                 'Authorization': `Bearer ${session && session.token}`
             },
+        }).then((resp: any) => {
+            return resp.data.data.map((item: any) => {
+                return new List(item);
+            })
         });
-        dispatch({ type: 'setList', payload: { list: resp.data.data }, error: undefined })
+
+        dispatch({ type: 'setList', payload: new Payload({ list: resp }), error: undefined })
     } catch (error) {
-        dispatch({ type: 'error', error: error.response.data.message, payload: undefined })
+        dispatch({ type: 'error', error: error.response.data.message, payload: new Payload(undefined) })
     }
 }
 
@@ -107,14 +122,18 @@ export async function getCardByListId(dispatch: Dispatch, session: any, listId: 
                 'X-Requested-With': 'XMLHttpRequest',
                 'Authorization': `Bearer ${session && session.token}`
             },
+        }).then((resp: any) => {
+            return resp.data.data.map((item: any) => {
+                return new Card(item);
+            })
         });
-        dispatch({ type: 'setCards', payload: { cards: resp.data.data, listId: listId }, error: undefined })
+        dispatch({ type: 'setCards', payload: new Payload({ cards: resp, listId: listId }), error: undefined })
     } catch (error) {
-        dispatch({ type: 'error', error: error.response.data.message, payload: undefined })
+        dispatch({ type: 'error', error: error.response.data.message, payload: new Payload(undefined) })
     }
 }
 
-export async function updateCard(dispatch: Dispatch, session: any, card: any) {
+export async function updateCard(dispatch: Dispatch, session: any, card: Card) {
     try {
         const resp = await axios({
             method: 'PUT',
@@ -127,13 +146,14 @@ export async function updateCard(dispatch: Dispatch, session: any, card: any) {
             },
             data: card
         });
-        dispatch({ type: 'updateCard', payload: { card: resp.data.data }, error: undefined })
+        const cardResp = new Card(resp.data.data);
+        dispatch({ type: 'updateCard', payload: new Payload({ card: cardResp }), error: undefined })
     } catch (error) {
-        dispatch({ type: 'error', error: error.response.data.message, payload: undefined })
+        dispatch({ type: 'error', error: error.response.data.message, payload: new Payload(undefined) })
     }
 }
 
-export async function deleteCard(dispatch: Dispatch, session: any, card: any) {
+export async function deleteCard(dispatch: Dispatch, session: any, card: Card) {
     try {
         await axios({
             method: 'DELETE',
@@ -145,13 +165,13 @@ export async function deleteCard(dispatch: Dispatch, session: any, card: any) {
                 'Authorization': `Bearer ${session && session.token}`
             },
         });
-        dispatch({ type: 'deleteCard', payload: { card: card }, error: undefined })
+        dispatch({ type: 'deleteCard', payload: new Payload({ card: card }), error: undefined })
     } catch (error) {
-        dispatch({ type: 'error', error: error.response.data.message, payload: undefined })
+        dispatch({ type: 'error', error: error.response.data.message, payload: new Payload(undefined) })
     }
 }
 
-export async function addCard(dispatch: Dispatch, session: any, card: any) {
+export async function addCard(dispatch: Dispatch, session: any, card: Card) {
     try {
         const resp = await axios({
             method: 'POST',
@@ -164,14 +184,14 @@ export async function addCard(dispatch: Dispatch, session: any, card: any) {
             },
             data: card
         });
-
-        dispatch({ type: 'addCard', payload: { card: resp.data.data }, error: undefined })
+        const cardResp = new Card(resp.data.data);
+        dispatch({ type: 'addCard', payload: new Payload({ card: cardResp }), error: undefined })
     } catch (error) {
-        dispatch({ type: 'error', error: error.response.data.message, payload: undefined })
+        dispatch({ type: 'error', error: error.response.data.message, payload: new Payload(undefined) })
     }
 }
 
-export async function updateList(dispatch: Dispatch, session: any, list: any) {
+export async function updateList(dispatch: Dispatch, session: any, list: List) {
     try {
         const resp = await axios({
             method: 'PUT',
@@ -186,13 +206,14 @@ export async function updateList(dispatch: Dispatch, session: any, list: any) {
                 listName: list.listName
             }
         });
-        dispatch({ type: 'updateList', payload: { list: resp.data.data }, error: undefined })
+        const listResp = new List(resp.data.data);
+        dispatch({ type: 'updateList', payload: new Payload({ list: listResp }), error: undefined })
     } catch (error) {
-        dispatch({ type: 'error', error: error.response.data.message, payload: undefined })
+        dispatch({ type: 'error', error: error.response.data.message, payload: new Payload(undefined) })
     }
 }
 
-export async function deleteList(dispatch: Dispatch, session: any, list: any) {
+export async function deleteList(dispatch: Dispatch, session: any, list: List) {
     try {
         await axios({
             method: 'DELETE',
@@ -204,13 +225,13 @@ export async function deleteList(dispatch: Dispatch, session: any, list: any) {
                 'Authorization': `Bearer ${session && session.token}`
             },
         });
-        dispatch({ type: 'deleteList', payload: { list: list }, error: undefined })
+        dispatch({ type: 'deleteList', payload: new Payload({ list: list }), error: undefined })
     } catch (error) {
-        dispatch({ type: 'error', error: error.response.data.message, payload: undefined })
+        dispatch({ type: 'error', error: error.response.data.message, payload: new Payload(undefined) })
     }
 }
 
-export async function createList(dispatch: Dispatch, session: any, list: any) {
+export async function createList(dispatch: Dispatch, session: any, list: List) {
     try {
         const resp = await axios({
             method: 'POST',
@@ -223,17 +244,17 @@ export async function createList(dispatch: Dispatch, session: any, list: any) {
             },
             data: list
         });
-
-        dispatch({ type: 'addList', payload: { list: resp.data.data }, error: undefined })
+        const listResp = new List(resp.data.data);
+        dispatch({ type: 'addList', payload: new Payload({ list: listResp }), error: undefined })
     } catch (error) {
-        dispatch({ type: 'error', error: error.response.data.message, payload: undefined })
+        dispatch({ type: 'error', error: error.response.data.message, payload: new Payload(undefined) })
     }
 }
 
 export function moveCardFromlist(dispatch: Dispatch, oldListId: string, cardId: string, destListId: string) {
-    dispatch({ type: 'moveCardFromlist', payload: { oldListId, cardId, destListId }, error: undefined })
+    dispatch({ type: 'moveCardFromlist', payload: new Payload({ oldListId, cardId, destListId }), error: undefined })
 }
 
 export function cleanStore(dispatch: Dispatch) {
-    dispatch({ type: 'cleanStore', payload: {}, error: undefined })
+    dispatch({ type: 'cleanStore', payload: new Payload({}), error: undefined })
 }
