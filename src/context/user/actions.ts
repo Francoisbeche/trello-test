@@ -1,13 +1,15 @@
 import { Dispatch } from './types';
 import axios from 'axios';
 
+const baseURL = 'http://localhost:8080/api';
 
 export async function login(dispatch: Dispatch, { email, password }: { email: string, password: string }) {
 
     try {
         const resp = await axios({
             method: 'post',
-            url: 'http://localhost:8080/api/session',
+            baseURL: baseURL,
+            url: '/session',
             data: {
                 email, password
             }
@@ -23,7 +25,8 @@ export async function register(dispatch: Dispatch, { email, password }: { email:
     try {
         const resp = await axios({
             method: 'post',
-            url: 'http://localhost:8080/api/user',
+            baseURL: baseURL,
+            url: '/user',
             data: {
                 email, password
             }
@@ -41,7 +44,8 @@ export async function getUser(dispatch: Dispatch, session: any) {
     try {
         const resp = await axios({
             method: 'get',
-            url: 'http://localhost:8080/api/user',
+            baseURL: baseURL,
+            url: '/user',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -60,7 +64,8 @@ export async function loginFlow(dispatch: Dispatch, { email, password }: { email
     try {
         const session = await axios({
             method: 'post',
-            url: 'http://localhost:8080/api/session',
+            url: '/session',
+            baseURL: baseURL,
             data: {
                 email, password
             }

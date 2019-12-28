@@ -5,11 +5,13 @@ import List from '../../models/List';
 import Card from '../../models/Card';
 import Payload from '../../models/Payload';
 
+const baseURL = 'http://localhost:8080/api';
 export async function getTeams(dispatch: Dispatch, session: any) {
     try {
         const resp = await axios({
             method: 'get',
-            url: 'http://localhost:8080/api/team',
+            baseURL: baseURL,
+            url: '/team',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -31,7 +33,8 @@ export async function updateTeam(dispatch: Dispatch, session: any, team: Team) {
     try {
         const resp = await axios({
             method: 'PUT',
-            url: `http://localhost:8080/api/team/update/${team.id}`,
+            baseURL: baseURL,
+            url: `team/update/${team.id}`,
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -52,7 +55,8 @@ export async function deleteTeam(dispatch: Dispatch, session: any, team: Team) {
     try {
         await axios({
             method: 'DELETE',
-            url: `http://localhost:8080/api/team/delete/${team.id}`,
+            baseURL: baseURL,
+            url: `/team/delete/${team.id}`,
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -70,7 +74,8 @@ export async function addTeam(dispatch: Dispatch, session: any, team: Team) {
     try {
         const resp = await axios({
             method: 'POST',
-            url: `http://localhost:8080/api/team`,
+            baseURL: baseURL,
+            url: `/team`,
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -92,7 +97,8 @@ export async function getListByTeamId(dispatch: Dispatch, session: any, teamId: 
     try {
         const resp = await axios({
             method: 'get',
-            url: `http://localhost:8080/api/list/${teamId}`,
+            baseURL: baseURL,
+            url: `/list/${teamId}`,
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -115,7 +121,8 @@ export async function getCardByListId(dispatch: Dispatch, session: any, listId: 
     try {
         const resp = await axios({
             method: 'get',
-            url: `http://localhost:8080/api/card/${listId}`,
+            baseURL: baseURL,
+            url: `/card/${listId}`,
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -137,7 +144,8 @@ export async function updateCard(dispatch: Dispatch, session: any, card: Card) {
     try {
         const resp = await axios({
             method: 'PUT',
-            url: `http://localhost:8080/api/card/update/${card.id}`,
+            baseURL: baseURL,
+            url: `/card/update/${card.id}`,
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -157,7 +165,8 @@ export async function deleteCard(dispatch: Dispatch, session: any, card: Card) {
     try {
         await axios({
             method: 'DELETE',
-            url: `http://localhost:8080/api/card/delete/${card.id}`,
+            baseURL: baseURL,
+            url: `/card/delete/${card.id}`,
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -175,7 +184,8 @@ export async function addCard(dispatch: Dispatch, session: any, card: Card) {
     try {
         const resp = await axios({
             method: 'POST',
-            url: `http://localhost:8080/api/card`,
+            baseURL: baseURL,
+            url: `/card`,
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -195,7 +205,8 @@ export async function updateList(dispatch: Dispatch, session: any, list: List) {
     try {
         const resp = await axios({
             method: 'PUT',
-            url: `http://localhost:8080/api/list/${list.id}`,
+            baseURL: baseURL,
+            url: `/list/${list.id}`,
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -217,7 +228,8 @@ export async function deleteList(dispatch: Dispatch, session: any, list: List) {
     try {
         await axios({
             method: 'DELETE',
-            url: `http://localhost:8080/api/list/${list.id}`,
+            baseURL: baseURL,
+            url: `/list/${list.id}`,
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -235,7 +247,8 @@ export async function createList(dispatch: Dispatch, session: any, list: List) {
     try {
         const resp = await axios({
             method: 'POST',
-            url: `http://localhost:8080/api/list`,
+            baseURL: baseURL,
+            url: `/list`,
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
